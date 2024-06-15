@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Agregar Administrador{% endblock %}
+{% block stylesheets %}
+    <style>
+        body {
+    background-color:#DED6D6;
+    }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container agregar-admin-container">
+        <div class="form-container agregar-admin-form">
+            {{ form_start(registrationForm, {'attr': {'id': 'registrationForm'}}) }}
+                <h1 class="h3 mb-3 fw-normal text-white">Agregar Administrador</h1>
+
+                {{ form_errors(registrationForm) }}
+
+                <div class="form-floating m-3">
+                    {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'name@example.com'}}) }}
+                    {{ form_label(registrationForm.email, 'Correo Electrónico') }}
+                    {{ form_errors(registrationForm.email) }}
+                </div>
+
+                <div class="form-floating m-3">
+                    {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control', 'placeholder': 'Contraseña'}}) }}
+                    {{ form_label(registrationForm.plainPassword.first, 'Contraseña') }}
+                    {{ form_errors(registrationForm.plainPassword.first) }}
+                </div>
+
+                <div class="form-floating m-3">
+                    {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control', 'placeholder': 'Repite la Contraseña'}}) }}
+                    {{ form_label(registrationForm.plainPassword.second, 'Repite la Contraseña') }}
+                    {{ form_errors(registrationForm.plainPassword.second) }}
+                </div>
+
+                <div class="form-check mb-3 text-white">
+                    {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+                    {{ form_label(registrationForm.agreeTerms, 'Estoy seguro de que quiero registrar este administrador', {'label_attr': {'class': 'form-check-label'}}) }}
+                    {{ form_errors(registrationForm.agreeTerms) }}
+                </div>
+
+                <div class="my-custom-class-for-errors">
+                    {{ form_errors(registrationForm) }}
+                </div>
+
+                <a href="{{ path('perfil_usuario') }}" class="btn btn-secondary w-100 mt-3 mb-3">Atrás</a>
+                <button type="submit" class="btn btn-primary w-100 py-2">Registrar Admin</button>
+            {{ form_end(registrationForm) }}
+        </div>
+    </div>
+{% endblock %}

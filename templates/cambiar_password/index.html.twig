@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cambiar Contraseña{% endblock %}
+{% block stylesheets %}
+    <style>
+body {
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(12,12,37,1) 14%, rgba(0,212,255,1) 100%);
+}
+
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center ">
+            <div class="col-md-6  mt-2 pb-2">
+                <h1 class="mt-5 mb-4 text-center">Cambiar Contraseña</h1>
+                {{ form_start(cambiarPasswordForm, {'attr': {'id': 'cambiarPasswordForm'}}) }}
+                    <div class="mb-3 text-light">
+                        {{ form_label(cambiarPasswordForm.passwordActual) }}
+                        {{ form_widget(cambiarPasswordForm.passwordActual, {'attr': {'class': 'form-control', 'id': 'passwordActual'}}) }}
+                        {{ form_errors(cambiarPasswordForm.passwordActual) }}
+                    </div>
+                    <div class="mb-3 text-light">
+                        {{ form_label(cambiarPasswordForm.nuevaPassword.first) }}
+                        {{ form_widget(cambiarPasswordForm.nuevaPassword.first, {'attr': {'class': 'form-control', 'id': 'nuevaPasswordFirst'}}) }}
+                        {{ form_errors(cambiarPasswordForm.nuevaPassword.first) }}
+                    </div>
+                    <div class="mb-3 text-light">
+                        {{ form_label(cambiarPasswordForm.nuevaPassword.second) }}
+                        {{ form_widget(cambiarPasswordForm.nuevaPassword.second, {'attr': {'class': 'form-control', 'id': 'nuevaPasswordSecond'}}) }}
+                        {{ form_errors(cambiarPasswordForm.nuevaPassword.second) }}
+                    </div>
+                <div class="my-custom-class-for-errors">
+                    {{ form_errors(cambiarPasswordForm) }}
+                </div>
+                    <button type="submit" class="btn btn-primary w-100">Confirmar Cambio</button>
+                    
+                {{ form_end(cambiarPasswordForm) }}
+
+                <a href="{{ path('perfil_usuario') }}" class="btn btn-secondary w-100 mt-3">Volver al Perfil</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{# templates/mandar_emails/mandar_emails.html.twig #}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>¡Gracias por tu compra!</title>
+    <style>
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        .card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        .card-body {
+            padding: 8px;
+        }
+        .card-title {
+            font-size: 1.25em;
+            margin-bottom: 8px;
+        }
+        .card-text {
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>¡Gracias por tu compra, {{ usuario.email }}!</h1>
+    <p>A continuación, encontrarás las claves de tus videojuegos:</p>
+
+    {% for item in items %}
+        <div class="card">
+            <div class="row no-gutters">
+                <div class="col-sm-4">
+                </div>
+                <div class="col-sm-8">
+                    <div class="card-body">
+                        <div class="card-title"><b>{{ item.videojuego.getUrlFoto() }}</b></div>
+                        <div class="card-title"><b>{{ item.videojuego.getNombre() }}</b></div>
+                        <div class="card-text"><b>Unidades:</b> {{ item.cantidad }}</div>
+                        <div class="card-text"><b>Precio Total:</b> {{ item.videojuego.getPrecio() * item.cantidad }} €</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <p>Esperamos que disfrutes tus juegos.</p>
+</body>
+</html>

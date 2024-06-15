@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Signin Template · Bootstrap v5.3{% endblock %}
+{% block stylesheets %}
+    <style>
+body {
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(12,12,37,1) 14%, rgba(0,212,255,1) 100%);
+}
+
+    </style>
+{% endblock %}
+
+{% block body %}
+    <head>
+        <script src="../assets/js/color-modes.js"></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+        <meta name="generator" content="Hugo 0.122.0">
+        <title>Signin Template · Bootstrap v5.3</title>
+        <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sign-in/">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+    </head>
+    <body class="d-flex align-items-center py-4 bg-body-tertiary">
+
+    <main class="form-signin w-50 m-auto">
+        <form method="post">
+            <h1 class="h3 mb-3 fw-normal text-center">Inicia sesion</h1>
+
+            {% if error %}
+                <div class="alert alert-danger">Login incorrecto. Prueba otra vez</div>
+            {% endif %}
+
+            <div class="form-floating m-2 p-6">
+            
+                <input type="email" class="form-control" id="username" name="_username" placeholder="name@example.com" value="{{ last_username }}" required autofocus>
+                <label class="sr-only" for="inlineFormInputGroup">Correo Electronico</label>
+            </div>
+            <div class="form-floating m-2">
+                <input type="password" class="form-control" id="password" name="_password" placeholder="Password" required>
+                <label for="password">Contraseña</label>
+            </div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            <button class="btn btn-primary mt-4 w-100 py-2" type="submit">Iniciar sesion</button>
+            <a href="{{ path('pagina_principal_index') }}" class="btn btn-secondary mt-4 w-100 py-2">Volver a la pagina principal</a>
+
+        </form>
+    </main>
+    <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+{% endblock %}

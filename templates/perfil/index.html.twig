@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+{% block title %}Mi Perfil{% endblock %}
+
+{% block stylesheets %}
+    <style>
+    body {
+        background: rgb(2,0,36);
+        background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(12,12,37,1) 14%, rgba(0,212,255,1) 100%);
+    }
+
+    .paginacion {
+        display: flex;
+        justify-content: center;
+        list-style: none;
+        padding: 0;
+    }
+  .paginacion li {
+      margin: 0 5px;
+  }
+  .paginacion a {
+      text-decoration: none;
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      border-color: #007bff;
+      border: 1px solid #dee2e6;
+  }
+  .paginacion a:hover {
+      background-color: #e9ecef;
+  }
+  .paginacion .active a {
+      background-color: #007bff;
+      color: white;
+      border-color: #007bff;
+      border: 1px solid #dee2e6;
+  }
+
+    </style>
+{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="text-center">
+                    <a href="{{ path('pagina_principal_index') }}" class="btn btn-secondary mt-4 mb-1">Ir a la página principal</a>
+                    {% if 'ROLE_ADMIN' in app.user.roles %}
+                        <h1 class="mt-5 mb-4">SECCION ADMIN</h1>
+                    {% endif %}
+                    {% if 'ROLE_ADMIN' not in app.user.roles %}
+                        <h1 class="mt-5 mb-4 ">Mi Perfil</h1>
+                    {% endif %}
+                    <div class="card">
+                        <div class="card-body">
+                            <p><strong>Correo Electrónico:</strong> {{ app.user.email }}</p>
+                            {% if 'ROLE_ADMIN' not in app.user.roles %}
+                                <p><strong>Mi saldo:</strong> {{ app.user.saldo }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer text-center">
+                            <a href="{{ path('cambiar_password') }}" class="btn btn-warning">Cambiar Contraseña</a>
+                            {% if 'ROLE_ADMIN' in app.user.roles %}
+                                <a href="{{ path('agregar_admin') }}" class="btn btn-primary">Añadir Administrador</a>
+                            {% endif %}
+                            {% if 'ROLE_ADMIN' not in app.user.roles %}
+                                <a href="{{ path('ingresar_saldo') }}" class="btn btn-primary">Agregar saldo</a>
+                            {% endif %}
+                            <form method="post" action="{{ path('eliminar_cuenta') }}" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar tu cuenta?');">
+                                <button type="submit" class="btn btn-danger">Eliminar Cuenta</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% if 'ROLE_ADMIN' in app.user.roles %}
+                    {% endif %}
+                    {% if 'ROLE_ADMIN' not in app.user.roles %}
+                       
+                       
+                       
+     <h1 class="mt-5 mb-4">Mis Pedidos</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>nº pedido</th>
+                <th>Fecha de realización</th>
+                <th>Videojuego</th>
+                <th>Clave</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pedido in pedidos %}
+                {% for clave in pedido.claves %}
+                    <tr>
+                        <td>{{ pedido.id }}</td>
+                        <td>{{ pedido.fechaRealizado|date('Y-m-d') }}</td>
+                        <td>{{ clave.videojuego.getNombre() }}</td>
+                        <td>{{ clave.getCodigo() }}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <ul class="paginacion">
+                            {% for i in 1..totalPaginas %}
+                                <li class="{{ paginaActual == i ? 'active' : '' }}">
+                                    <a href="{{ path('app_perfil', { 'pagina': i }) }}">{{ i }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

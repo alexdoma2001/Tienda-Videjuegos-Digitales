@@ -1,3 +1,17 @@
-body {
-    background-color: skyblue;
+a{
+    text-decoration: none;
+    color: white;
 }
+
+a::backdrop{
+    text-decoration: none;
+    color: grey;
+}
+
+.hover-gris:hover{
+    background-color: gray;
+    border-color: gray;
+    color: white; 
+}
+    
+.text-rojo { color: red; }

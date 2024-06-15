@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Añadir Videojuego{% endblock %}
+{% block stylesheets %}
+    <style>
+body {
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(12,12,37,1) 14%, rgba(0,212,255,1) 100%);
+    color: white;
+}
+
+.form_label{
+    color:black;
+}
+
+.form_errors{
+    color:red;
+}
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h1 class="mt-5 mb-4">Añadir Videojuego</h1>
+
+                {{ form_start(form) }}
+                    <div class="form-group">
+                        {{ form_label(form.nombre) }}
+                        {{ form_widget(form.nombre) }}
+                        {{ form_errors(form.nombre) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.descripcion) }}
+                        {{ form_widget(form.descripcion) }}
+                        {{ form_errors(form.descripcion) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.precio) }}
+                        {{ form_widget(form.precio) }}
+                        {{ form_errors(form.precio) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.urlFoto) }}
+                        {{ form_widget(form.urlFoto) }}
+                        {{ form_errors(form.urlFoto) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.categoria) }}
+                        {{ form_widget(form.categoria) }}
+                        {{ form_errors(form.categoria) }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Añadir Videojuego</button>
+                    <a href="{{ path('pagina_principal_index') }}" class="btn btn-secondary mt-3">Volver</a>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

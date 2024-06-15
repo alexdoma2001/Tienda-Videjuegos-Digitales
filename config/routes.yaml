@@ -3,3 +3,52 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+pagina_principal_index:
+    path: /pagina-principal
+    controller: App\Controller\PaginaPrincipalController::index
+
+ruta_login:
+    path: /login
+    controller: App\Controller\LoginController::index
+
+ruta_registro:
+    path: /registration
+    controller: App\Controller\RegistrationController::register
+
+categorias_filtradas:
+    path: /categorias/{categoria}
+    controller: App\Controller\PaginaPrincipalController::categoriasFiltradas
+
+perfil_usuario:
+    path: /perfil
+    controller: App\Controller\PerfilController::profile
+
+cambiar_password:
+    path: /cambiar_password
+    controller: App\Controller\CambiarPasswordController::cambiarPassword
+
+ingresar_saldo:
+    path: /ingresar_saldo
+    controller: App\Controller\IngresarSaldoController::ingresarSaldo
+
+agregar_admin:
+    path: /agregar_admin
+    controller: App\Controller\AdminController::AgregarAdmin
+
+agregar_videojuego:
+    path: /agregar_videojuego
+    controller: App\Controller\AgregarVideojuegoController::AgregarVideojuego
+
+agregar_clave:
+    path: /agregar_clave
+    controller: App\Controller\AgregarClaveController::AgregarClave
+
+eliminar_videojuego:
+    path: /eliminar_videojuego/{id}
+    controller: App\Controller\EliminarVideojuegoController::eliminarVideojuego
+    methods: ['POST']
+
+carrito_compra:
+    path: /carrito_compra
+    controller: App\Controller\CarritoCompra::CarritoCompra

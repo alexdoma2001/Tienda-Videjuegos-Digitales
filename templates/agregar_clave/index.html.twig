@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Agregar Clave{% endblock %}
+{% block stylesheets %}
+    <style>
+        body{
+            background: rgb(2,0,36);
+            background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(12,12,37,1) 14%, rgba(0,212,255,1) 100%);
+            color: white;
+        }
+
+        .container-clave {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .form-container-clave {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            border-radius: 15px;
+            padding: 20px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            align-items:center;
+        }
+        .form-group {
+            margin-bottom: 1em;
+        }
+
+
+    </style>
+{% endblock %}
+{% block body %}
+    <div class="container-clave">
+        <div class="form-container-clave">
+            <h1 class="mt-4 text-center">Añadir Clave para {{ videojuego.nombre }}</h1>
+            <div class="card-imagen">
+                <img src="{{ videojuego.getUrlFoto() }}" class="card-img-top">
+            </div>
+            <!-- Metemos los mensajes de error del twig -->
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
+
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+
+            {{ form_start(form) }}
+                <div class="form-group">
+                    {{ form_label(form.codigo) }}
+                    {{ form_widget(form.codigo) }}
+                    {{ form_errors(form.codigo) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.confirmar_codigo) }}
+                    {{ form_widget(form.confirmar_codigo) }}
+                    {{ form_errors(form.confirmar_codigo) }}
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Añadir Clave</button>
+                <a href="{{ path('pagina_principal_index') }}" class="btn btn-secondary mt-3">Volver</a>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+

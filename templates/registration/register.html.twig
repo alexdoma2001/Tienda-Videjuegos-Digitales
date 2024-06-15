@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registro{% endblock %}
+
+{% block stylesheets %}
+    <style>
+body {
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(12,12,37,1) 14%, rgba(0,212,255,1) 100%);
+}
+
+.error{
+    color:red;
+}
+
+    </style>
+{% endblock %}
+
+{% block body %}
+<main class="form-signin w-50 m-auto ">
+    {{ form_start(registrationForm, {'attr': {'id': 'registrationForm'}}) }}
+        <h1 class="h3 mb-3 fw-normal text-center text-white">Registro</h1>
+        {{ form_errors(registrationForm) }}
+
+        <div class="form-floating mb-3">
+            {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Correo Electrónico'}}) }}
+            {{ form_label(registrationForm.email, 'Correo Electrónico') }}
+            <div class="error">{{ form_errors(registrationForm.email) }}</div>
+        </div>
+
+        <div class="form-floating mb-3">
+            {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'form-control', 'placeholder': 'Contraseña'}}) }}
+            {{ form_label(registrationForm.plainPassword.first, 'Contraseña') }}
+            <div class="error">{{ form_errors(registrationForm.plainPassword.first) }}</div>
+        </div>
+
+        <div class="form-floating mb-3">
+            {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'form-control', 'placeholder': 'Repite la Contraseña'}}) }}
+            {{ form_label(registrationForm.plainPassword.second, 'Repite la Contraseña') }}
+            <div class="error">{{ form_errors(registrationForm.plainPassword.second) }}</div>
+        </div>
+
+        <div class="form-check mb-3 text-white">
+            {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+            {{ form_label(registrationForm.agreeTerms, 'Estoy de acuerdo con los términos y condiciones', {'label_attr': {'class': 'form-check-label'}}) }}
+           <div class="error"> {{ form_errors(registrationForm.agreeTerms) }}</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 py-2">Registrar</button>
+        <a href="{{ path('pagina_principal_index') }}" class="btn btn-secondary mt-4 w-100">Ir a la página principal</a>
+    {{ form_end(registrationForm) }}
+</main>
+{% endblock %}

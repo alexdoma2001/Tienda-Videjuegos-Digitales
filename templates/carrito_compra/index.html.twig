@@ -1,0 +1,126 @@
+    {% extends 'base.html.twig' %}
+
+    {% block body %}
+<style>
+    body {
+        background: rgb(2,0,36);
+        background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(12,12,37,1) 14%, rgba(0,212,255,1) 100%);
+    }
+    .contenedor {
+        display: flex;
+        margin: 1em auto;
+        max-width: 1000px; /* Incrementar el ancho total del contenedor */
+        width: 90%
+        font: 18px/1.5 sans-serif;
+        transform: translateX(-5%);
+    }
+    .left-panel {
+        flex: 1;
+        margin-right: 2%;
+    }
+    .right-panel {
+        flex: 3;
+    }
+    .card {
+        background: #E7E3E3;
+        width: 100%;
+        max-width: 800px;
+        margin-bottom: 1em;
+    }
+    .card-img {
+        height: 100%;
+        width: 100%;
+        max-width: 200px;
+        max-height: 200px;
+    }
+    .boton_añadir, .boton_eliminar_cantidad, .boton_eliminar_producto {
+        width: auto;
+        max-width: 150px;
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+    .contenedor_saldo {
+        margin-bottom: 30px;
+    }
+    .alerta-roja-saldo {
+        position: relative;
+    }
+    .precio_total_general {
+        text-align: center;
+        margin-top: 2em;
+    }
+    .btn-success {
+        display: inline-block;
+    }
+</style>
+
+<div class="contenedor">
+    <div class="left-panel">
+        <a href="{{ path('pagina_principal_index') }}" class="btn btn-dark mt-5 ms-4 mb-4 text-center">Ir a la página principal</a>
+        <div class="contenedor_saldo">
+            <div class="card mb-3 p-3">
+                <div class="card-body">
+                    <p class="card-text">Saldo actual: {{ app.user.saldo }} €</p>
+                    <a href="ingresar_saldo" class="btn btn-primary boton_añadir">Agregar saldo</a>
+                </div>
+            </div>
+        </div>
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert bg-danger">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div class="bg-danger alerta-roja-saldo">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('success') %}
+            <div>{{ message }}</div>
+        {% endfor %}
+    </div>
+    <div class="right-panel mt-5">
+        {% for id, item in carrito %}
+            <div class="card float-right m-3 p-3">
+                <div class="row no-gutters">
+                    <div class="col-sm-4">
+                        <img class="card-img" src="{{ item.videojuego.getUrlFoto() }}">
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="card-body">
+                            <b>{{ item.videojuego.getNombre() }}</b>
+                            <br>
+                            <b>Unidades:</b><span id="cantidad-{{ item.videojuego.getId() }}">{{ item.cantidad }}</span>
+                            <br>
+                            <b id="precio_total">Precio:</b><span> {{ item.videojuego.getPrecio() * item.cantidad }} €</span>
+                            <br>
+                        </div>
+                        <a href="{{ path('agregar_cantidad', {'id': item.videojuego.getId()}) }}" class="btn btn-primary boton_añadir">Añadir cantidad</a>
+                        <a href="{{ path('eliminar_cantidad', {'id': item.videojuego.getId()}) }}" class="btn btn-warning boton_eliminar_cantidad">Eliminar Cantidad</a>
+                        <a href="{{ path('eliminar_producto', {'id': item.videojuego.getId()}) }}" class="btn btn-danger boton_eliminar_producto">Eliminar Producto</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="precio_total_general">
+            <h3 class="text-center">Precio Total: {{ precio_total }} €</h3>
+            <form method="post" action="{{ path('comprar') }}">
+                <button type="submit" class="btn btn-success btn-md">Comprar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+    <script>
+    function actualizarPrecioTotalGeneral() {
+        var precioTotalGeneral = 0;
+        //Seleccionamos todos los elementos del precio total y los sumamos
+        var elementosCarrito = document.querySelectorAll('.precio-total');
+        elementosCarrito.forEach(function(elemento) {
+            precioTotalGeneral += parseFloat(elemento.textContent.replace(' €', ''));
+        });
+        document.getElementById('precio-total').textContent = precioTotalGeneral.toFixed(2) + ' €'; //Se redonde a 2
+    }
+
+    </script>
+    {% endblock %}

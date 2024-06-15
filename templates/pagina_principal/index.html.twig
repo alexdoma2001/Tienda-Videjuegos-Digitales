@@ -1,0 +1,176 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PaginaPrincipalController!{% endblock %}
+
+{% block stylesheets %}
+<style>
+body{
+background: rgb(2,0,36);
+ background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(12,12,37,1) 14%, rgba(0,212,255,1) 100%);
+}
+
+.alert-success{
+    max-height: 100px;
+}
+
+.pagina-principal .alert-danger {
+    color: red;
+}
+
+</style>
+{% endblock %}
+{% block body %}
+
+<header class="p-3 text-bg-dark">
+    <div class="container">
+ {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">{{ message|raw }}</div> <!-- raw es para que coja el boton del html-->
+        {% endfor %}
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">{{ message|raw }}</div> 
+        {% endfor %}
+        <div class="d-flex flex-wrap align-items-center justify-content-between">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
+            </a>
+            
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="{{ path('pagina_principal_index') }}" class="nav-link px-2 text-secondary">Inicio</a></li>
+                <li class="nav-item dropdown">
+                    <form action="{{ path('app_pagina_principal') }}" method="get" class="d-flex">
+                        <select name="categoria" class="form-select">
+                            <option value="" selected>Seleccione una categoría (Todas)</option>
+                            {% for categoria in categorias %}
+                                <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="btn btn-primary">Filtrar</button>
+                    </form>
+                </li>
+            </ul>
+            
+            <div class="text-start d-flex align-items-center">
+                {% if app.user %}
+                    <div class="d-flex justify-content-center align-items-center">
+                        <a href="{{ path('perfil_usuario') }}" class="btn btn-primary me-2">{{ app.user.userIdentifier }}</a>
+                    </div>
+                    <form action="{{ path('app_logout') }}" method="post">
+                        <button type="submit" class="btn btn-outline-light me-2">Logout</button>
+                    </form>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('agregar_videojuego') }}" class="btn btn-warning me-2">Añadir Videojuego</a>
+                    {% else %}
+                        <button type="button" class="btn btn-warning me-2">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="20px" height="20px"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+  <path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/></svg>
+                            <a href="{{ path('carrito_compra') }}">Carrito</a>
+                        </button>
+                    {% endif %}
+                {% else %}
+                    <button type="button" class="btn btn-outline-light me-2 hover-gris">
+                        <a href="{{ path('ruta_login') }}">Login</a>
+                    </button>
+                    <button type="button" class="btn btn-warning">
+                        <a href="{{ path('ruta_registro') }}">Registrarse</a>
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="album py-5">
+    <div class="container">
+        <div class="row">
+            {% for item in videojuegosConClavesDisponibles %}
+                {% set videojuego = item.videojuego %}
+                {% set claves_disponibles = item.claves_disponibles %}
+                {% if loop.index % 3 == 1 %}
+                    <div class="row">
+                {% endif %}
+                <div class="col-md-4">
+                    <div class="card mb-4" style="width: 21rem;">
+                        <img src="{{ videojuego.getUrlFoto() }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ videojuego.getNombre()|e }}</h5>
+                            <p class="card-text">{{ videojuego.getDescripcion()|e }}</p>
+                            <span class="card-text">{{ videojuego.getPrecio() }} €</span>
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <br>
+                                        <a href="{{ path('app_agregar_clave', { 'id': videojuego.getId() }) }}" class="btn btn-primary">Añadir Clave</a>
+                                        <button class="btn btn-warning" onclick="mostrarFormularioEdicion({{ videojuego.getId() }})">Editar</button>
+                                        <form action="{{ path('eliminar_videojuego', { 'id': videojuego.getId() }) }}" method="post" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este videojuego?');" style="display:inline;">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ videojuego.getId()) }}">
+                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                        </form>
+                                    {% else %}
+                                    <!-- Para que me aparezca sin stock-->
+                                        {% if claves_disponibles|length > 0 %}
+                                        <form action ="{{ path('actualizar_carrito')}}" method="post"> 
+                                            <input type="hidden" name="id" value="{{ videojuego.getId() }}">
+                                            <button type="submit" class="btn btn-primary">Comprar</button>
+                                        </form>
+                                        {% else %}
+                                            <p class="card-text text-rojo">Sin stock</p>
+                                        {% endif %}
+                                    {% endif %}
+                                    
+                                <!-- Formulario de editar -->
+                                <div id="formulario-edicion-{{ videojuego.getId() }}" style="display: none;">
+                                    <form action="{{ path('editar_videojuego', { 'id': videojuego.getId() }) }}" method="post">
+                                        <input type="text" name="nombre" value="{{ videojuego.getNombre() }}">
+                                        <textarea name="descripcion">{{ videojuego.getDescripcion() }}</textarea>
+                                        <!-- Lo de step de aqui abajo es para que me admita por todos los navegadores que me admita numeros decimales -->
+                                        <input type="number" step="0.01" name="precio" value="{{ videojuego.getPrecio() }}"> 
+                                        <button type="submit" class="btn btn-success">Realizar cambios</button>
+                                        <button type="button" class="btn btn-secondary" onclick="ocultarFormularioEdicion({{ videojuego.getId() }})">Atrás</button>
+                                    </form>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                {% if loop.index % 3 == 0 or loop.last %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <!-- Paginacion -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if pagina > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ path('app_pagina_principal', {'pagina': pagina - 1}) }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% for i in 1..totalPaginas %}
+                    <li class="page-item {% if i == pagina %}active{% endif %}">
+                        <a class="page-link" href="{{ path('app_pagina_principal', {'pagina': i}) }}">{{ i }}</a>
+                    </li>
+                {% endfor %}
+                {% if pagina < totalPaginas %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ path('app_pagina_principal', {'pagina': pagina + 1}) }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+<script>
+    
+    function mostrarFormularioEdicion(videojuegoId) {
+        var formulario = document.getElementById('formulario-edicion-' + videojuegoId);
+        formulario.style.display = 'block';
+    }
+
+    function ocultarFormularioEdicion(videojuegoId) {
+        var formulario = document.getElementById('formulario-edicion-' + videojuegoId);
+        formulario.style.display = 'none';
+    }
+
+</script>
+{% endblock %}
